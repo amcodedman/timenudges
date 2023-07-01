@@ -4,8 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, Form } from "react-bootstrap";
 import { CircleSpinner } from "react-spinners-kit";
-import { TextField } from "@mui/material";
-import LoaderView from "../utils/loaderView";
+
 import { Passwordreset, SignIn } from "../../store/actions/adminActions";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { LockFill } from "react-bootstrap-icons";

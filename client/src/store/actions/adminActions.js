@@ -49,7 +49,7 @@ export const preRegister = (userdata) => {
 export const ComfirmUserS = (userdata) => {
   return async (dispatch) => {
     try {
-      const newd = await axios.post("/user/authenticateme", userdata);
+      const newd = await axios.post("/api/user/authenticateme", userdata);
       dispatch(notify.notify_success({ msg: "Account verified" }));
     } catch (error) {
       
@@ -139,7 +139,7 @@ export const Passwordreset = (data) => {
   return async (dispatch) => {
     try {
       const profiledetail = await axios.patch(
-        "/user/passwordforgotreset",
+        "/api/user/passwordforgotreset",
         data
       );
       dispatch(notify.notify_success({ msg: "Welcome back" }));
