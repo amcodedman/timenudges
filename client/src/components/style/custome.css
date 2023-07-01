@@ -1049,7 +1049,7 @@ padding-bottom: -20px;
 .layout{
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 70%;
 min-height: 400px;
  background-color: rgba(43, 40, 40, 0.8);
  margin-top: 10px;
