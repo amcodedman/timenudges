@@ -6,7 +6,7 @@ const bodyParser=require("body-parser")
 const cookieParser=require("cookie-parser")
 const PORT=process.env.PORT ||3003
 const path=require("path")
-
+var cors = require('cors')
 const MongoUrl=`mongodb+srv://timenudgemcommunity:${process.env.DB_PASS}@timenudge.ypp9h2p.mongodb.net/`
 
 
@@ -15,13 +15,13 @@ const Admin=require("./routers/Admin")
 const users=require("./routers/users")
 const geo=require("./routers/geo")
 const database=require("./routers/databa")
-
+app.use(cors())
 const {checkToken}=require("./middleware/auth")
-
 app.use(bodyParser.json())
-
 app.use(cookieParser())
+
 app.use(checkToken)
+
 /// middlewares
 app.use("/admin",Admin)
 app.use("/user",users)
