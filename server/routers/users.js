@@ -43,6 +43,7 @@ routers.route("/preregister").post(async (req, res) => {
         process.env.ACCOUNT_ACTIVATION,
         { expiresIn: "1d" }
       );
+      console.log(email)
       await RegisterUser(firstname, email, signtoken);
       res.status(200).json({ msg: email });
     }
@@ -252,7 +253,7 @@ routers.route("/signin").post(async (req, res) => {
 routers.route("/modifyuser/:id").patch(async (req, res) => {
   try {
     const _id = req.params.id;
-    console.log(_id);
+   
 
     const updated_user = await User.findOneAndUpdate(
       { _id: _id },
@@ -264,7 +265,7 @@ routers.route("/modifyuser/:id").patch(async (req, res) => {
       { new: true }
     );
     res.status(200).json(updated_user);
-    console.log({ updated: updated_user });
+ 
   } catch (error) {
     res.status(400).json({ msg: "error" });
     console.log(error);
