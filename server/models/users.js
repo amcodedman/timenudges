@@ -23,6 +23,14 @@ email:{
 password:{
     type:String
 },
+company:{
+    type:String,
+    default:"Institute timetable"
+},
+department:{
+    type:String,
+    default:"My department"
+},
 
 phone: {
     type: Number,
@@ -35,14 +43,7 @@ phone: {
     default:"string"
 },
 
-institute:{
-    type:String,
-  
-},
-department:{
-    type:String,
-}
-,
+
 institution:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"institutetable"}
