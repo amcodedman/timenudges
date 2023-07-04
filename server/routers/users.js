@@ -51,7 +51,7 @@ routers.route("/preregister").post(async (req, res) => {
         { expiresIn: "1d" }
       );
       await RegisterUser(firstname, email, signtoken);
-      res.status(200).json({"msg":"sent"});
+      res.status(200).json({"msg":email});
     }
   } catch (error) {
     res.status(400).json({ msg: error });

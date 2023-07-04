@@ -20,7 +20,7 @@ ref:"days"}]
 
 const daySchema = mongoose.Schema({
   day: {
-    type: Date,
+    type: String,
     required: true,
   },
 
@@ -33,8 +33,9 @@ const holidaySchema = mongoose.Schema({
 title:{
   type:String
 },
-  day: {
-    type: Date,
+ 
+day: {
+    type: String,
     required: true,
   },
 
@@ -45,9 +46,9 @@ const shedule_schema=mongoose.Schema({
     type:String
   },
   from:{
-    type:Date
+    type:String
   },to:{
-type:Date
+type:String
   },
   count:{
     type:Number
@@ -66,12 +67,12 @@ const oneTimeshedule_schema=mongoose.Schema({
     type:String
   },
   date:{
-type:Date
+type:String
   },
   from:{
-    type:Date
+    type:String
   },to:{
-type:Date
+type:String
   },
   count:{
     type:Number
@@ -120,7 +121,7 @@ ref:"institutedays"}]
 
 const IdaySchema = mongoose.Schema({
   day: {
-    type: Date,
+    type: String,
     required: true,
   },
 
@@ -136,9 +137,9 @@ const Ishedule_schema=mongoose.Schema({
     type:String
   },
   from:{
-    type:Date
+    type:String
   },to:{
-type:Date
+type:String
   },
   count:{
     type:Number
