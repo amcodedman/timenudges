@@ -35,11 +35,14 @@ phone: {
     default:"string"
 },
 
-denger:{
-    type:Number,
-    default:0
+institute:{
+    type:String,
+  
 },
-
+department:{
+    type:String,
+}
+,
 institution:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"institutetable"}
@@ -49,10 +52,10 @@ task:[{
     ref:"onetimeshedule"
 }]
 ,timetable:
-    {
+ [ {
         type:mongoose.Schema.Types.ObjectId,
         ref:"regulartable"
-    }
+    }]
     
 
 ,

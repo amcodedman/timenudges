@@ -85,16 +85,12 @@ type:String
 
 
 const instituteSchema = mongoose.Schema({
-  name:{
-    type:String
-  },
+
   description:{
     type:String
 
   },
-  course:{
-    type:String
-  },
+
   user:
     {type:mongoose.Schema.Types.ObjectId,
     ref:"users"}

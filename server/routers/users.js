@@ -11,20 +11,13 @@ const { RegisterUser, sendOtp, ResetPass } = require("../config/gateway");
 const jwt = require("jsonwebtoken");
 const { Admin } = require("../models/users");
 const bcryt = require("bcrypt");
+const { DayModel, timeNModel, IDayModel, InstituteModel } = require("../models/Database");
 /////////////////////////////////////////////// create new user
 
 routers.route("/preregister").post(async (req, res) => {
   try {
-    const {
-      firstname,
-      lastname,
-      email,
-      age,
-      password,
-      username
-,
-      phone,
-    } = req.body;
+    const { firstname, lastname, email, age, password, username, phone } =
+      req.body;
     const check_user = await User.findOne({ email: email });
     const usern = await User.findOne({ username: username });
 
@@ -46,16 +39,16 @@ routers.route("/preregister").post(async (req, res) => {
       }
     } else if (!check_user) {
       const signtoken = jwt.sign(
-        { firstname, lastname, email, age, password, username,},
+        { firstname, lastname, email, age, password, username },
         process.env.ACCOUNT_ACTIVATION,
         { expiresIn: "1d" }
       );
       await RegisterUser(firstname, email, signtoken);
-      res.status(200).json({"msg":email});
+      res.status(200).json({ msg: email });
     }
   } catch (error) {
     res.status(400).json({ msg: error });
-    console.log(error)
+    console.log(error);
   }
 });
 
@@ -89,6 +82,98 @@ routers.route("/authenticateme").post(async (req, res) => {
       });
 
       const save_user = await user.save();
+      const name = save_user.username + " Timeline";
+      const data = new timeNModel({
+        user: save_user._id,
+        name: name,
+      });
+      const table = await data.save();
+      
+      await User.findByIdAndUpdate(
+        { _id: save_user._id },
+        {
+          $push: {
+            timetable: table._id,
+          },
+        },
+        { new: true, useFindAndModify: false }
+      );
+
+      const dataI = new InstituteModel({
+        user: save_user._id,
+    
+      });
+      const tableI = await dataI.save();
+      console.log(tableI)
+      await User.findByIdAndUpdate(
+        { _id: save_user._id },
+        {
+          $push: {
+            institution: tableI._id,
+          },
+        },
+        { new: true, useFindAndModify: false }
+      );
+     
+
+      const dayss = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ];
+
+      dayss.forEach(async day=>{
+        try{
+  const data = new DayModel({
+  
+            day: day,
+           });
+   const result=await data.save();
+   
+   await timeNModel.findByIdAndUpdate(
+     { _id: table._id},
+     {
+       $push: {
+         days: result._id,
+       },
+     },
+     { new: true, useFindAndModify: false }
+   );
+   
+
+   const dataI = new IDayModel({
+  
+    day: day,
+   });
+const resultI=await dataI.save();
+
+await InstituteModel.findByIdAndUpdate(
+{ _id: tableI._id},
+{
+$push: {
+ days: resultI._id,
+},
+},
+{ new: true, useFindAndModify: false }
+);
+
+  
+
+        }catch(error){
+          console.log(error);
+
+        }
+        
+
+
+      })
+
+
+
 
       const token = user.generate_token();
 
@@ -135,9 +220,6 @@ routers.route("/signin").post(async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-  
-  
- 
 
     const user_ac = await User.findOne({ email: email });
     console.log(email);
@@ -150,7 +232,6 @@ routers.route("/signin").post(async (req, res) => {
       if (user_ac.active === "true") {
         const matchpassword = await user_ac.comparepassword(password);
         if (matchpassword == true) {
-         
           const token = user_ac.generate_token();
           res.status(200).json(updateD);
         }
@@ -158,7 +239,6 @@ routers.route("/signin").post(async (req, res) => {
           res.status(400).json({ msg: "Wrong user credentials" });
         }
       }
-     
     }
     if (!user_ac) {
       res.status(400).json({ msg: "user not found" });
@@ -172,7 +252,7 @@ routers.route("/signin").post(async (req, res) => {
 routers.route("/modifyuser/:id").patch(async (req, res) => {
   try {
     const _id = req.params.id;
-    console.log(_id)
+    console.log(_id);
 
     const updated_user = await User.findOneAndUpdate(
       { _id: _id },
@@ -184,7 +264,7 @@ routers.route("/modifyuser/:id").patch(async (req, res) => {
       { new: true }
     );
     res.status(200).json(updated_user);
-    console.log({updated:updated_user})
+    console.log({ updated: updated_user });
   } catch (error) {
     res.status(400).json({ msg: "error" });
     console.log(error);
@@ -199,19 +279,15 @@ routers.route("/profile").get(Checkuser, async (req, res) => {
   try {
     console.log("profile");
 
-    
     const user = await req.user;
-if(user !== undefined){
-  res.status(200).json(user);
-}
-if(user === undefined){
-  res.status(400).json(user);
- 
-}
-
-    
+    if (user !== undefined) {
+      res.status(200).json(user);
+    }
+    if (user === undefined) {
+      res.status(400).json(user);
+    }
   } catch (error) {
-    res.status(400).json({msg: error});
+    res.status(400).json({ msg: error });
   }
 });
 
@@ -234,18 +310,17 @@ routers.route("/deluser/:id").delete(async (req, res) => {
   }
 });
 
-
 routers.route("/userresetpass/:id").patch(async (req, res) => {
   try {
     const _id = req.params.id;
-    console.log({pass: req.body})
+    console.log({ pass: req.body });
     const user_a = await User.findById({ _id });
     if (user_a) {
-      console.log(user_a)
+      console.log(user_a);
       const matchpassword = await user_a.comparepassword(req.body.oldpass);
       if (matchpassword == false) {
         res.status(400).json({ msg: " Not Permitted ,password mismatch" });
-        console.log("Not Permitted")
+        console.log("Not Permitted");
       }
       if (matchpassword == true) {
         const salt = await bcryt.genSalt(10);
@@ -297,19 +372,24 @@ routers.route("/userforgotpass").post(async (req, res) => {
 
 routers.route("/getuser/:id").get(async (req, res) => {
   try {
-    
-const _id=req.params.id;
-    const data =await User.find({_id:_id})
-  
-    .populate({path:"institution",populate:({path:"days",populate:{path:"shedules"}}) })
-    .populate("task")
-    .populate({path:"timetable",populate:({path:"days",populate:{path:"shedules"}})})
-    .populate("messages")
+    const _id = req.params.id;
+    const data = await User.find({ _id: _id })
+
+      .populate({
+        path: "institution",
+        populate: { path: "days", populate: { path: "shedules" } },
+      })
+      .populate("task")
+      .populate({
+        path: "timetable",
+        populate: { path: "days", populate: { path: "shedules" } },
+      })
+      .populate("messages");
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
 
-    console.log(error)
+    console.log(error);
   }
 });
 routers.route("/passwordforgotreset").patch(async (req, res) => {
@@ -342,7 +422,6 @@ routers.route("/passwordforgotreset").patch(async (req, res) => {
     console.log(error);
   }
 });
-
 
 routers.route("/sendpasswordresetlink").post(async (req, res) => {
   try {

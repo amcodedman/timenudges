@@ -1,0 +1,15 @@
+
+      const data = new timeNModel({
+        user: save_user._id,
+        name: name,
+      });
+      const content = await data.save();
+      await User.findByIdAndUpdate(
+        { _id: user },
+        {
+          $set: {
+            timetable: content._id,
+          },
+        },
+        { new: true }
+      );
