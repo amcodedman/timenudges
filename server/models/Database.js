@@ -33,7 +33,9 @@ const holidaySchema = mongoose.Schema({
 title:{
   type:String
 },
- 
+ month:{
+  type:String
+ },
 day: {
     type: String,
     required: true,
