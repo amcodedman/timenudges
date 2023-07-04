@@ -1,5 +1,5 @@
 
-import React,{useEffect} from "react";
+import React from "react";
 
 
 import {BrowserRouter,Routes,Route} from "react-router-dom"
@@ -16,7 +16,7 @@ import ConfirmAccount from "./components/Front/confirmAccount";
 
 
 function App() {
-  
+
   return (
    <BrowserRouter>
 <Routes>

@@ -5,7 +5,7 @@ import { Axiosinstance, Getusercookie } from "./usercookie";
 const { USER_DETAIL, USERS, NEW_USER, PRE_REGISTER } = require("../type");
 
 export const get_users = (detail) => ({
-  type: USERS,
+  type: USERS,  
   payload: detail,
 });
 
@@ -20,6 +20,10 @@ export const userDetail = (data) => ({
 });
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.interceptors.request.use(config => {
+  config.mode = "cors";
+  return config;
+});
 
 export const getAllUsers = () => {
   return async (dispatch) => {
@@ -49,11 +53,12 @@ export const preRegister = (userdata) => {
 export const ComfirmUserS = (userdata) => {
   return async (dispatch) => {
     try {
+       console.log(userdata);
       const newd = await axios.post("/api/user/authenticateme", userdata);
       dispatch(notify.notify_success({ msg: "Account verified" }));
     } catch (error) {
       
-      dispatch(notify.notify_success({ msg: error.response.data.msg }));
+      dispatch(notify.notify_error({ msg: error.response.data.msg }));
     }
   };
 };
@@ -61,7 +66,7 @@ export const ComfirmUserS = (userdata) => {
 export const updateAccount = (data, id) => {
   return async (dispatch) => {
     try {
-      const profiledetail = await axios.patch(`/user/modifyuser/${id}`,data);
+      const profiledetail = await axios.patch(`/api/user/modifyuser/${id}`,data);
       dispatch(userDetail({ account: profiledetail.data, auth: true }));
    
       dispatch(notify.notify_success({ msg: "Account Updated" }));
@@ -75,7 +80,7 @@ export const UpdatePass = (data, id) => {
   return async (dispatch) => {
     try {
 
-      const profiledetail = await axios.patch(`/user/userresetpass/${id}`,data);
+      const profiledetail = await axios.patch(`/api/user/userresetpass/${id}`,data);
       dispatch(userDetail({ account: profiledetail.data, auth: true }));
       dispatch(notify.notify_success({ msg: "Account Password Updated" }));
     } catch (error) {
@@ -86,7 +91,7 @@ export const UpdatePass = (data, id) => {
 export const SignIn = (data) => {
   return async (dispatch) => {
     try {
-      const profiledetail = await axios.post("/user/signin", data);
+      const profiledetail = await axios.post("/api/user/signin", data);
       dispatch(userDetail({ account: profiledetail.data, auth: true }));
       dispatch(
         notify.notify_success({
@@ -106,7 +111,7 @@ export const AutoLogin = (data) => {
     try {
       console.log("AutoLogin");
       let token = Getusercookie();
-      const profiledetail = await axios.get("/user/profile", {
+      const profiledetail = await axios.get("/api/user/profile", {
         headers: {
           authuser: token,
         },
@@ -127,7 +132,7 @@ export const AutoLogin = (data) => {
 export const SendresetLink = (data) => {
   return async (dispatch) => {
     try {
-      const profiledetail = await axios.post("/user/userforgotpass", data);
+      const profiledetail = await axios.post("/api/user/userforgotpass", data);
       dispatch(notify.notify_success({ msg: "Check your mails" }));
     } catch (error) {
       dispatch(notify.notify_error({ msg: error.response.data }));
@@ -139,7 +144,7 @@ export const Passwordreset = (data) => {
   return async (dispatch) => {
     try {
       const profiledetail = await axios.patch(
-        "/api/user/passwordforgotreset",
+        "/api/api/user/passwordforgotreset",
         data
       );
       dispatch(notify.notify_success({ msg: "Welcome back" }));

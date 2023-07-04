@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
+
 import { CheckCircle } from "react-bootstrap-icons";
 import { CircleSpinner } from "react-spinners-kit";
 import { ComfirmUserS } from "../../store/actions/adminActions";
+import { showToastify } from "../utils/reuseable";
+import { ClearNotify } from "../../store/actions/notification";
+
 
 const ConfirmAccount = () => {
   const [searchParams] = useSearchParams();
@@ -15,14 +19,25 @@ const ConfirmAccount = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (notifications && notifications.notice) {
+      if(notifications.success===false){
+      
+        showToastify("ERROR", notifications.notice.msg)
+        dispatch(ClearNotify());
+        setload(false); 
+        console.log(loading)
+      
+      }
+     
       if (notifications.success) {
-        setload(false);
-        navigate("/");
+        showToastify("SUCCESS", notifications.notice.msg)
+        dispatch(ClearNotify());
+       navigate("/");
       }
     }
-  });
+  },[notifications,dispatch,navigate]);
   const Comfirmme = () => {
     setload(true);
+  
     dispatch(ComfirmUserS({ t: token }));
   };
 
@@ -33,7 +48,7 @@ const ConfirmAccount = () => {
     >
 
 
-      <p className="verifypage">
+      <p className="verifypage" style={{fontFamily:"Roboto condensed", fontSize:"20px",fontWeight:"bold",color:"darkblue"}}>
         Please click on{" "}
         <span style={{ fontFamily: "Roboto condensed", color: "blue",fontSize:"14px" }}>Verify me</span>{" "}
         to complete process
@@ -62,12 +77,12 @@ const ConfirmAccount = () => {
         )}
       </div>
       <div className="footer">
-        <div className="frontitemhover">
+       
           <p>
-            Powered By Cybertec Inc<span style={{ color: "green" }}> @ </span>{" "}
+            Handcrafted By TimeNudge Inc<span style={{ color: "green" }}> @ </span>{" "}
             2023
           </p>
-        </div>
+       
       </div>
     </div>
   );
