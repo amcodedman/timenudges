@@ -34,7 +34,7 @@ const Home = () => {
       <div className="footer">
         <div>
           <p>
-            Powered By Cybertec Inc
+          Handcrafted By Evelyn Ashiakey and Majorie Tabitah
             <span style={{ color: "green" }}> @ </span> 2023
           </p>
         </div>

@@ -79,7 +79,8 @@ const ConfirmAccount = () => {
       <div className="footer">
        
           <p>
-            Handcrafted By TimeNudge Inc<span style={{ color: "green" }}> @ </span>{" "}
+            Handcrafted By Evelyn Ashiakey and Majorie Tabitah
+<span style={{ color: "green" }}> @ </span>{" "}
             2023
           </p>
        

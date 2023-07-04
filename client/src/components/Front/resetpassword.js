@@ -149,12 +149,12 @@ Join  now to embark on your journey of
       </div>
 
       <div className="footer">
-        <div className="frontitemhover">
+   
           <p>
-            Powered By Cybertec Inc<span style={{ color: "green" }}> @ </span>{" "}
+          Handcrafted By Evelyn Ashiakey and Majorie Tabitah<span style={{ color: "green" }}> @ </span>{" "}
             2023
           </p>
-        </div>
+     
       </div>
     </div>
   );
