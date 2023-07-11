@@ -227,19 +227,18 @@ routers.route("/signin").post(async (req, res) => {
 
     if (user_ac) {
       console.log({ jams: user_ac });
-      if (user_ac.active === "false") {
-        res.status(400).json({ msg: "user blocked" });
-      }
-      if (user_ac.active === "true") {
         const matchpassword = await user_ac.comparepassword(password);
+      
         if (matchpassword == true) {
-          const token = user_ac.generate_token();
-          res.status(200).json(updateD);
+          console.log({ jamsss: user_ac });
+         
+          res.status(200).json(user_ac);
+
         }
         if (matchpassword == false) {
           res.status(400).json({ msg: "Wrong user credentials" });
         }
-      }
+      
     }
     if (!user_ac) {
       res.status(400).json({ msg: "user not found" });
