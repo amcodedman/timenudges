@@ -53,10 +53,12 @@ const shedule_schema=mongoose.Schema({
 type:String
   },
   count:{
-    type:Number
+    type:Number,
+    default:0
   },
   complete:{
-    type:Number
+    type:Number,
+    default:0
   }
 })
 
@@ -77,10 +79,12 @@ type:String
 type:String
   },
   count:{
-    type:Number
+    type:Number,
+    default:0
   },
   complete:{
-    type:Number
+    type:Number,
+    default:0
   }
 })
 
@@ -140,10 +144,12 @@ const Ishedule_schema=mongoose.Schema({
 type:String
   },
   count:{
-    type:Number
+    type:Number,
+    default:0
   },
   complete:{
-    type:Number
+    type:Number,
+    default:0
   }
 })
 
