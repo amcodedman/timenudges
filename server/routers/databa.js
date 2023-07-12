@@ -116,16 +116,18 @@ routes.route("/message").post(async (req, res) => {
 
 routes.route("/modifyishedule/:id").patch(async (req, res) => {
   try {
-
-    const data = new ISheduleModel.findByIdAndUpdate({_id:req.params.id},{
+console.log(req.params.id);
+    const data = await ISheduleModel.findByIdAndUpdate({_id:req.params.id},{
       $set:{
         ...req.body
       }
     },{new:true});
   
     res.status(200).json(data);
+    console.log(data);
   } catch (error) {
     res.status(400).json({ msg: error });
+    console.log(error)
   }
 });
 
@@ -133,7 +135,7 @@ routes.route("/modifyishedule/:id").patch(async (req, res) => {
 routes.route("/modifytask/:id").patch(async (req, res) => {
   try {
 
-    const data = new OneTimeS.findByIdAndUpdate({_id:req.params.id},{
+    const data = await OneTimeS.findByIdAndUpdate({_id:req.params.id},{
       $set:{
         ...req.body
       }
@@ -148,7 +150,7 @@ routes.route("/modifytask/:id").patch(async (req, res) => {
 routes.route("/modifyholiday").patch(async (req, res) => {
   try {
 
-    const data = new HolidaysModel.findByIdAndUpdate({_id:req.params.id},{
+    const data = await HolidaysModel.findByIdAndUpdate({_id:req.params.id},{
       $set:{
         ...req.body
       }
@@ -163,7 +165,7 @@ routes.route("/modifyholiday").patch(async (req, res) => {
 routes.route("/modifyshedule/:id").patch(async (req, res) => {
   try {
 
-    const data = new SheduleModel.findByIdAndUpdate({_id:req.params.id},{
+    const data =await SheduleModel.findByIdAndUpdate({_id:req.params.id},{
       $set:{
         ...req.body
       }
@@ -179,7 +181,7 @@ routes.route("/deleteiday/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = IDayModel.findByIdAndDelete({_id:_id});
+    const data = await IDayModel.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -190,7 +192,7 @@ routes.route("/deleteday/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = DayModel.findByIdAndDelete({_id:_id});
+    const data = await DayModel.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -201,7 +203,7 @@ routes.route("/deleteishedule/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = ISheduleModel.findByIdAndDelete({_id:_id});
+    const data =await  ISheduleModel.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -212,7 +214,7 @@ routes.route("/deleteshedule/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = SheduleModel.findByIdAndDelete({_id:_id});
+    const data = await SheduleModel.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -223,7 +225,7 @@ routes.route("/deletemessages/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = Message.findByIdAndDelete({_id:_id});
+    const data =await Message.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -234,7 +236,7 @@ routes.route("/deletetask/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = OneTimeS.findByIdAndDelete({_id:_id});
+    const data = await OneTimeS.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
@@ -247,7 +249,7 @@ routes.route("/deleteholiday/:id").delete(async (req, res) => {
   try {
     
 const _id=req.params.id;
-    const data = HolidaysModel.findByIdAndDelete({_id:_id});
+    const data =await  HolidaysModel.findByIdAndDelete({_id:_id});
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ msg: error });
