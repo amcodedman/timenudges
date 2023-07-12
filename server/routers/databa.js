@@ -7,31 +7,6 @@ const express = require("express");
 const { User } = require("../models/users");
 const routes = express.Router();
 /** creation */
-routes.route("/regularday").post(async (req, res) => {
-  try {
-    const table= req.body.table ;
-    const data = new DayModel({
-
-      ...req.body
-    });
-    const conten = await data.save();
-
-    await timeNModel.findByIdAndUpdate(
-      { _id: table},
-      {
-        $push: {
-          days: conten._id,
-        },
-      },
-      { new: true, useFindAndModify: false }
-    );
-
-    res.status(200).json(conten);
-  } catch (error) {
-    res.status(400).json({ msg: error });
-    console.log(error)
-  }
-});
 
 routes.route("/createregularshedule").post(async (req, res) => {
   try {
@@ -55,64 +30,13 @@ routes.route("/createregularshedule").post(async (req, res) => {
     res.status(400).json({ msg: error });
   }
 });
-routes.route("/createregulartable").post(async (req, res) => {
-  try {
-    const user= req.body.user;
 
-    const data = new timeNModel({
-      ...req.body,
-    });
-    const content = await data.save();
-    await User.findByIdAndUpdate(
-      { _id: user },
-      {
-        $set: {
-          timetable: content._id,
-        },
-      },
-      { new: true}
-    );
-    res.status(200).json(content);
-  } catch (error) {
-    res.status(400).json({ msg: error });
-  }
-});
-
-
-
-
-
-
-routes.route("/instituteregularday").post(async (req, res) => {
-  try {
-    const table= req.body.table ;
-    const data = new IDayModel({
-      ...req.body
-    });
-    const conten = await data.save();
-
-    await InstituteModel.findByIdAndUpdate(
-      { _id: table},
-      {
-        $push: {
-          days: conten._id,
-        },
-      },
-      { new: true, useFindAndModify: false }
-    );
-
-    res.status(200).json(conten);
-  } catch (error) {
-    res.status(400).json({ msg: error });
-    console.log(error)
-  }
-});
 
 routes.route("/createinstituteshedule").post(async (req, res) => {
   try {
     const day = req.body.day;
     const data = new ISheduleModel({
-      ...req.body,from:Date.now(),to:Date.now()
+      ...req.body,
     });
     const content = await data.save();
 
@@ -130,29 +54,6 @@ routes.route("/createinstituteshedule").post(async (req, res) => {
     res.status(400).json({ msg: error });
   }
 });
-routes.route("/createinstitutetable").post(async (req, res) => {
-  try {
-    const user= req.body.user;
-
-    const data = new InstituteModel({
-      ...req.body,
-    });
-    const content = await data.save();
-    await User.findByIdAndUpdate(
-      { _id: user },
-      {
-        $set: {
-          institution: content._id,
-        },
-      },
-      { new: true}
-    );
-    res.status(200).json(content);
-  } catch (error) {
-    res.status(400).json({ msg: error });
-  }
-});
-
 
 routes.route("/createtask").post(async (req, res) => {
   try {
@@ -213,7 +114,7 @@ routes.route("/message").post(async (req, res) => {
 
 
 
-routes.route("/modifyishedule").patch(async (req, res) => {
+routes.route("/modifyishedule/:id").patch(async (req, res) => {
   try {
 
     const data = new ISheduleModel.findByIdAndUpdate({_id:req.params.id},{
@@ -229,7 +130,7 @@ routes.route("/modifyishedule").patch(async (req, res) => {
 });
 
 
-routes.route("/modifytask").patch(async (req, res) => {
+routes.route("/modifytask/:id").patch(async (req, res) => {
   try {
 
     const data = new OneTimeS.findByIdAndUpdate({_id:req.params.id},{
@@ -259,7 +160,7 @@ routes.route("/modifyholiday").patch(async (req, res) => {
   }
 });
 
-routes.route("/modifyshedule").patch(async (req, res) => {
+routes.route("/modifyshedule/:id").patch(async (req, res) => {
   try {
 
     const data = new SheduleModel.findByIdAndUpdate({_id:req.params.id},{
