@@ -16,7 +16,7 @@ const personalregularSchema = mongoose.Schema({
  days:[{
   type:mongoose.Schema.Types.ObjectId,
 ref:"days"}]
-});
+},{timestamps:true});
 
 const daySchema = mongoose.Schema({
   day: {
@@ -60,7 +60,7 @@ type:String
     type:Number,
     default:0
   }
-})
+},{timestamps:true})
 
 
 const oneTimeshedule_schema=mongoose.Schema({
@@ -83,7 +83,7 @@ type:String
     default:0
   },
 
-})
+},{timestamps:true})
 
 
 
@@ -103,7 +103,7 @@ const instituteSchema = mongoose.Schema({
   type:mongoose.Schema.Types.ObjectId,
 ref:"institutedays"}]
 
-});
+},{timestamps:true});
 
 
 
@@ -148,7 +148,7 @@ type:String
     type:Number,
     default:0
   }
-})
+},{timestamps:true})
 
 
 
