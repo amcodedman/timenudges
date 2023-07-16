@@ -82,10 +82,7 @@ type:String
     type:Number,
     default:0
   },
-  complete:{
-    type:Number,
-    default:0
-  }
+
 })
 
 
