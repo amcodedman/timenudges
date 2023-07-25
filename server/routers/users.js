@@ -104,7 +104,7 @@ routers.route("/authenticateme").post(async (req, res) => {
         },
         { new: true, useFindAndModify: false }
       );
-      const randomNumber = Math.floor(Math.random() * (500 - 100 + 1)) + 100;
+      const randomNumber = Math.floor(Math.random() * (1000 - 100 + 1)) + 100;
       const supportcareid = save_user.lastname + `${randomNumber}`;
   await User.findByIdAndUpdate(
         { _id: save_user._id },
