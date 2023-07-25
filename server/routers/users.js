@@ -250,6 +250,29 @@ routers.route("/signin").post(async (req, res) => {
   }
 });
 
+
+routers.route("/parentcare").post(async (req, res) => {
+  try {
+    const parentcare = req.body.parentcare;
+   
+
+    const user_ac = await User.findOne({ parentcare: email });
+  
+
+    if (user_ac) {
+   
+        console.log({ jamsss: user_ac });
+
+        res.status(200).json(user_ac);
+      }       
+    if (!user_ac) {
+      res.status(400).json({ msg: "user not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ msg: error });
+  }
+});
+
 //////////////////////////////////////////////// modify user content
 routers.route("/modifyuser/:id").patch(async (req, res) => {
   try {
