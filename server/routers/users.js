@@ -256,7 +256,7 @@ routers.route("/parentcare").post(async (req, res) => {
     const parentcare = req.body.parentcare;
    
 
-    const user_ac = await User.findOne({ parentcare: email });
+    const user_ac = await User.findOne({ "parentcare": parentcare });
   
 
     if (user_ac) {
@@ -268,6 +268,7 @@ routers.route("/parentcare").post(async (req, res) => {
     if (!user_ac) {
       res.status(400).json({ msg: "user not found" });
     }
+    console.log(parentcare);
   } catch (error) {
     res.status(400).json({ msg: error });
   }
