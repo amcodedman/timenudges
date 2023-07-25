@@ -11,7 +11,12 @@ const { RegisterUser, sendOtp, ResetPass } = require("../config/gateway");
 const jwt = require("jsonwebtoken");
 const { Admin } = require("../models/users");
 const bcryt = require("bcrypt");
-const { DayModel, timeNModel, IDayModel, InstituteModel } = require("../models/Database");
+const {
+  DayModel,
+  timeNModel,
+  IDayModel,
+  InstituteModel,
+} = require("../models/Database");
 /////////////////////////////////////////////// create new user
 
 routers.route("/preregister").post(async (req, res) => {
@@ -43,7 +48,6 @@ routers.route("/preregister").post(async (req, res) => {
         process.env.ACCOUNT_ACTIVATION,
         { expiresIn: "1d" }
       );
-      console.log(email)
       await RegisterUser(firstname, email, signtoken);
       res.status(200).json({ msg: email });
     }
@@ -84,12 +88,13 @@ routers.route("/authenticateme").post(async (req, res) => {
 
       const save_user = await user.save();
       const name = save_user.username + " Timeline";
+
       const data = new timeNModel({
         user: save_user._id,
         name: name,
+
       });
       const table = await data.save();
-      
       await User.findByIdAndUpdate(
         { _id: save_user._id },
         {
@@ -99,13 +104,26 @@ routers.route("/authenticateme").post(async (req, res) => {
         },
         { new: true, useFindAndModify: false }
       );
+      const randomNumber = Math.floor(Math.random() * (500 - 100 + 1)) + 100;
+      const supportcareid = save_user.lastname + `${randomNumber}`;
+  await User.findByIdAndUpdate(
+        { _id: save_user._id },
+        {
+          $set: {
+            parentcare: supportcareid,
+          },
+        },
+        {new: true}
+      );
+
+
+
 
       const dataI = new InstituteModel({
         user: save_user._id,
-    
       });
       const tableI = await dataI.save();
-      console.log(tableI)
+      console.log(tableI);
       await User.findByIdAndUpdate(
         { _id: save_user._id },
         {
@@ -115,7 +133,6 @@ routers.route("/authenticateme").post(async (req, res) => {
         },
         { new: true, useFindAndModify: false }
       );
-     
 
       const dayss = [
         "Monday",
@@ -127,54 +144,41 @@ routers.route("/authenticateme").post(async (req, res) => {
         "Sunday",
       ];
 
-      dayss.forEach(async day=>{
-        try{
-  const data = new DayModel({
-  
+      dayss.forEach(async (day) => {
+        try {
+          const data = new DayModel({
             day: day,
-           });
-   const result=await data.save();
-   
-   await timeNModel.findByIdAndUpdate(
-     { _id: table._id},
-     {
-       $push: {
-         days: result._id,
-       },
-     },
-     { new: true, useFindAndModify: false }
-   );
-   
+          });
+          const result = await data.save();
 
-   const dataI = new IDayModel({
-  
-    day: day,
-   });
-const resultI=await dataI.save();
+          await timeNModel.findByIdAndUpdate(
+            { _id: table._id },
+            {
+              $push: {
+                days: result._id,
+              },
+            },
+            { new: true, useFindAndModify: false }
+          );
 
-await InstituteModel.findByIdAndUpdate(
-{ _id: tableI._id},
-{
-$push: {
- days: resultI._id,
-},
-},
-{ new: true, useFindAndModify: false }
-);
+          const dataI = new IDayModel({
+            day: day,
+          });
+          const resultI = await dataI.save();
 
-  
-
-        }catch(error){
+          await InstituteModel.findByIdAndUpdate(
+            { _id: tableI._id },
+            {
+              $push: {
+                days: resultI._id,
+              },
+            },
+            { new: true, useFindAndModify: false }
+          );
+        } catch (error) {
           console.log(error);
-
         }
-        
-
-
-      })
-
-
-
+      });
 
       const token = user.generate_token();
 
@@ -227,18 +231,16 @@ routers.route("/signin").post(async (req, res) => {
 
     if (user_ac) {
       console.log({ jams: user_ac });
-        const matchpassword = await user_ac.comparepassword(password);
-      
-        if (matchpassword == true) {
-          console.log({ jamsss: user_ac });
-         
-          res.status(200).json(user_ac);
+      const matchpassword = await user_ac.comparepassword(password);
 
-        }
-        if (matchpassword == false) {
-          res.status(400).json({ msg: "Wrong user credentials" });
-        }
-      
+      if (matchpassword == true) {
+        console.log({ jamsss: user_ac });
+
+        res.status(200).json(user_ac);
+      }
+      if (matchpassword == false) {
+        res.status(400).json({ msg: "Wrong user credentials" });
+      }
     }
     if (!user_ac) {
       res.status(400).json({ msg: "user not found" });
@@ -252,7 +254,6 @@ routers.route("/signin").post(async (req, res) => {
 routers.route("/modifyuser/:id").patch(async (req, res) => {
   try {
     const _id = req.params.id;
-   
 
     const updated_user = await User.findOneAndUpdate(
       { _id: _id },
@@ -264,7 +265,6 @@ routers.route("/modifyuser/:id").patch(async (req, res) => {
       { new: true }
     );
     res.status(200).json(updated_user);
- 
   } catch (error) {
     res.status(400).json({ msg: "error" });
     console.log(error);

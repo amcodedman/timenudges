@@ -9,6 +9,9 @@ firstname:{
     type:String,
     min:4,max:15
 },
+parentcare:{
+type:String,
+},
 lastname:{
     type:String,
     min:4,max:15
